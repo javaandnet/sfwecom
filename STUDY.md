@@ -19,3 +19,5 @@ app.get('/',function(req, res){//get,put,post,delete
   res.sendFile(path.join(__dirname, "./", "web", "dist2","index.html"));
   // res.sendFile(path.join(__dirname,'/web/dist/index.html'));
 });
+## Apex
+http://kayakuguri.github.io/blog/2014/02/26/submit-callout-with-multipart/

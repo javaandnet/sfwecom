@@ -1,0 +1,27 @@
+public class HttpRequestUtil {
+    @future(callout=true)
+ public static void sendMsg(){
+     HttpRequest  req = new HttpRequest ();
+     req.setEndpoint('http://160.16.216.251:11117/msg?type=1&to=SALESFORCE&msg=SALESFORCETEST');
+     req.setMethod('GET');
+     
+     // Specify the required user name and password to access the endpoint
+     // As well as the header and header information
+ 
+     String username = 'myname';
+     String password = 'mypwd';
+  
+   //  Blob headerValue = Blob.valueOf(username + ':' + password);
+   ////  String authorizationHeader = 'Basic ' +
+     //EncodingUtil.base64Encode(headerValue);
+  //   req.setHeader('Authorization', authorizationHeader);
+  // params = 'hoge[]=huga&hoge[]=fuge';
+	//request.setBody(params);
+     // Create a new http object to send the request object
+     // A response object is generated as a result of the request  
+  
+     Http http = new Http();
+     HttpResponse  res = http.send(req);
+     System.debug(res.getBody());
+   }
+}
