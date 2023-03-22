@@ -21,3 +21,9 @@ app.get('/',function(req, res){//get,put,post,delete
 });
 ## Apex
 http://kayakuguri.github.io/blog/2014/02/26/submit-callout-with-multipart/
+## Vue
+1. setup的函数是开放给外界看，xxx.value可访问
+2. @绑定方法
+3. :data-id="user.Id" var id = e.currentTarget.dataset.id;
+4. 数据迁移 this.$router.push({ name: 'userInfo', query: { user: id } })
+      
