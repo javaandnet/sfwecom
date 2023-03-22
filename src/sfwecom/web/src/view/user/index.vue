@@ -1,7 +1,7 @@
 <template>
   <div>
       <van-cell-group>
-        <van-cell :title="user.Name"   label="" v-for="user in users" :key="user.id"/>
+        <van-cell :title="user.Name"  :data-id="user.Id" label="" v-for="user in users" :key="user.Id" is-link @click="onClick"/>
       </van-cell-group>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
     mounted() {
       var me = this;
     axios.defaults.baseURL = 'http://localhost:3000';
-    axios.get("/sf",{},{})
+    axios.get("/sf/worker",{},{})
           .then(function(res){
             //vueにバインドされている値を書き換えると表示に反映される
             me.users = res.data.records;
@@ -37,7 +37,12 @@ export default {
           })
   },
   methods: {
-
+    onClick(e){
+      var id = e.currentTarget.dataset.id;
+      // オブジェクト
+      this.$router.push({ name: 'userInfo', query: { user: id } })
+      console.log(e.currentTarget.dataset.id);
+    }
   },
 };
 </script>

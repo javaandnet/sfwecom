@@ -33,19 +33,33 @@ class JSH {
         if (me.conn == null) {
             await me.login();
         }
-       
+
         return new Promise(function (resolve, reject) {
             me.conn.query(sql, function (err, res) {
                 if (err) {
                     console.error(err);
-                    reject(err);
+                    resolve(err);
+                } else {
+                    resolve(res);
                 }
-                resolve(res);
             });
         });
     }
-    update() {
-
+    async update(objectName, rec) {
+        var me = this;
+        if (me.conn == null) {
+            await me.login();
+        }
+        return new Promise(function (resolve, reject) {
+            me.conn.sobject(objectName).update(rec, function (err, res) {
+                if (err) {
+                    console.error(err);
+                    resolve(err);
+                } else {
+                    resolve(res);
+                }
+            });
+        });
     }
     insert() {
 
@@ -53,8 +67,31 @@ class JSH {
     delete() {
 
     }
+    async retrieve(objectName, id) {
+        var me = this;
+        if (me.conn == null) {
+            await me.login();
+        }
+        return new Promise(function (resolve, reject) {
+            // Single record retrieval
+            me.conn.sobject(objectName).retrieve(id, function (err, res) {
+                if (err) {
+                    console.log(err);
+                    resolve({ errorCode: err.errorCode });
+                } else {
+                    console.log("Name : " + res.Name);
+                    resolve(res);
+                }
+            });
+        });
+        //[
+        //   "0017000000hOMChAAO",
+        //   "0017000000iKOZTAA4"
+        // ]
+    }
 }
 
 export { JSH };
 //http://160.16.216.251:11117/msg?type=1&to=SALESFORCE&msg=SALESFORCETEST
 //http://160.16.216.251:11117/sf
+//http://localhost:3000/sf/worker/a050l00000GQUk9AAH

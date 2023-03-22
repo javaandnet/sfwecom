@@ -17,6 +17,14 @@ const routes = [
     },
   },
   {
+    name: 'userInfo',
+    path: '/user/info',
+    component: () => import('./view/user/info'),
+    meta: {
+      title: '社員详细信息',
+    },
+  },
+  {
     name: 'goods',
     path: '/goods',
     component: () => import('./view/goods'),

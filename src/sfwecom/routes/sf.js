@@ -5,8 +5,7 @@ var router = express.Router();
 
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-
+router.get('/worker', function (req, res, next) {
   var jsh = new JSH();
   var sql = 'SELECT Id, Name FROM worker__C';
   jsh.query(sql).then(data => {
@@ -18,9 +17,35 @@ router.get('/', function (req, res, next) {
       res.send("false");
     }
   });
-
 });
-
-
+/* GET users listing. */
+router.get('/worker/:user', function (req, res, next) {
+  var user = req.params.user;
+  var jsh = new JSH();
+  jsh.retrieve("worker__c",user).then(data => {
+    var rtn = "";
+    // console.log(data);
+ 
+      //data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
+      res.send({id:data.Id,name:data.Name,status:data.Status__c});
+    
+  });
+});
+router.post('/worker/:user/update', function (req, res, next) {
+  var user = req.params.user;
+  console.log(req.body);
+  var jsh = new JSH();
+  jsh.update("worker__c",{Id:user,Status__c:req.body.Status__c}).then(data => {
+      res.send(data);
+  });
+  // jsh.retrieve("worker__c",user).then(data => {
+  //   var rtn = "";
+  //   // console.log(data);
+ 
+  //     //data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
+  //     res.send({id:data.Id,name:data.Name,status:data.Status__c});
+    
+  // });
+});
 
 export default router;
