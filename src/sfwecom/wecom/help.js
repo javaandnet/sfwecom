@@ -1,13 +1,14 @@
 import { Wecom } from "wecom";
 import { User } from 'wecom';
+import config from './config.js';
 // const Wecom = require("wecom");
 // const User = require("wecom");
 
 class WCH {
   constructor(x) {
     const wecom = new Wecom({
-      corpId: "ww2460c9d1886951ff",
-      corpSecret: "H0FnPR_xIE397RPx7uiyFsmF_nfvCKB2pJJCPjxT_nU",
+      corpId: config.corpId,
+      corpSecret: config.corpSecret
     });
     this.wecom = wecom;
   }
@@ -23,20 +24,27 @@ class WCH {
     console.log(111111);
   }
 
-  // Create Group
-  async createGroup() {
+/**
+ * 
+ * グルプを作成する
+ * 
+ * @param {*} chatid 
+ * @param {*} groupName 
+ * @param {*} owner 
+ * @param {*} userlist  配列　["A", "B", "C"]
+ */
+  async createGroup(chatid,groupName,owner,userlist) {
     var me = this;
     var token = await me.getToken();
     me.wecom.request({
       url: "/appchat/create?access_token=" + token,
       method: "POST",
-      // 发送消息的参数参照 [（官方文档）](https://work.weixin.qq.com/api/doc/90000/90135/90236) [（API 文档）]()
       data: {
-        name: "SF テスト",
-        "owner": "nin",
+        name: groupName,
+        "owner": owner,
         msgtype: "text",
-        "userlist": ["nin", "zhf", "zhangyiqi"],
-        "chatid": "SALESFORCE"
+        "userlist": userlist,
+        "chatid": chatid
       },
     }).then(function (e, cb) {
       console.log(e.data);
@@ -75,7 +83,7 @@ class WCH {
         data: {
           touser: to,
           msgtype: "text",
-          agentid: 1000002,
+          agentid: config.agentid,
           text: {
             content: msg,
           },
@@ -88,8 +96,8 @@ class WCH {
   async getUserList() {
     // 成员管理模块实例化
     const user = new User({
-      corpId: "ww2460c9d1886951ff",
-      corpSecret: "H0FnPR_xIE397RPx7uiyFsmF_nfvCKB2pJJCPjxT_nU",
+        corpId: config.corpId,
+        corpSecret: config.corpSecret
     });
     var aa = await user.simpleList(1, 0);
     console.log(aa.data.userlist.length);

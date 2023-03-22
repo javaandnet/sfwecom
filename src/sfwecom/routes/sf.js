@@ -8,14 +8,12 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
 
   var jsh = new JSH();
-
-
-  jsh.login().then(data => {
-    console.log(data);
+  var sql = 'SELECT Id, Name FROM worker__C';
+  jsh.query(sql).then(data => {
     var rtn = "";
     if (data.totalSize > 0) {
-      data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
-      res.send(rtn);
+      //data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
+      res.send(data);
     } else {
       res.send("false");
     }
