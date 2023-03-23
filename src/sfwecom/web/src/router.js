@@ -23,15 +23,7 @@ const routes = [
     meta: {
       title: '社員详细信息',
     },
-  },
-  {
-    name: 'goods',
-    path: '/goods',
-    component: () => import('./view/goods'),
-    meta: {
-      title: '商品详情',
-    },
-  },
+  }
 ];
 
 const router = createRouter({

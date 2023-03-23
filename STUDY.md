@@ -1,8 +1,9 @@
 1. require Node.js 导入 
-2. import ES6 导入 不能混合
+2. import ES6 导入 不能混合ß
 ## 导入导出例子
 3. import { WCH } from '../wecom/help.js';
 4. export { WCH };
+5. import  wcconfig  from '../wecom/config.js'; wcconfig　可与里面导出不一致 实现换名
 ## NPM 升级
 1. n 支持切换版本 不适合时 可以降版本
 ## Pm2 升级

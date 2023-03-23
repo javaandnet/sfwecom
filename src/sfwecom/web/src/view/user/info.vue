@@ -9,15 +9,30 @@
           placeholder="姓名"
           readonly
         />
-        <van-field name="switch" label="停止营业">
+        <van-field name="salesStatus" label="营业可能">
           <template #input>
-            <van-switch v-model="user.status" />
+            <van-switch v-model="user.salesStatus" />
           </template>
         </van-field>
+        <van-field
+          v-model="user.reason"
+          name="reason"
+          rows="1"
+          autosize
+          label="原因"
+          type="textarea"
+          maxlength="80"
+          placeholder="原因"
+        />
       </van-cell-group>
       <div style="margin: 16px">
         <van-button round block type="primary" native-type="submit">
-          提交
+          更新
+        </van-button>
+      </div>
+      <div style="margin: 16px; height: 10px">
+        <van-button round block type="warning" @click="onClick">
+          戻る
         </van-button>
       </div>
     </van-form>
@@ -40,11 +55,13 @@ export default {
     const onSubmit = (values) => {
       console.log("submit", values);
       console.log("userId", userId.value);
+      values.Id = userId.value;
+      values.salesStatus = values.salesStatus ? "可能" : "不可";
       var me = this;
       axios
         .post(
           "http://localhost:3000/sf/worker/" + userId.value + "/update",
-          { Id: userId.value, Status__c: "稼働中" },
+          values,
           {}
         )
         .then(function (res) {
@@ -76,8 +93,8 @@ export default {
       .then(function (res) {
         //vueにバインドされている値を書き換えると表示に反映される
         me.user = res.data;
-        console.log(me.user.status);
-        me.user.status = me.user.status == "稼働中";
+        console.log(me.user.salesStatus);
+        me.user.salesStatus = me.user.salesStatus == "可能";
       })
       .catch(function (res) {
         //vueにバインドされている値を書き換えると表示に反映される
@@ -87,7 +104,12 @@ export default {
       });
   },
 
-  methods: {},
+  methods: {
+    onClick(e) {
+      // オブジェクト
+      this.$router.go(-1);
+    },
+  },
 };
 </script>
 <style>

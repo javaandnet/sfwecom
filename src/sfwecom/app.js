@@ -13,6 +13,7 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import msgRouter from './routes/msg.js';
 import sfRouter from './routes/sf.js';
+import wcRouter from './routes/wc.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,6 +61,7 @@ app.get('/',function(req, res){//get,put,post,delete
 // app.use('/users', usersRouter);
 app.use('/msg', msgRouter);
 app.use('/sf', sfRouter);
+app.use('/wc', wcRouter);
 
 /**
  * Listen on provided port, on all network interfaces.

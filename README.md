@@ -38,3 +38,9 @@ npm run build
 
 ### 代码格式校验
 npm run lint
+
+## 企業WeCom获取userId
+1. 创建一个链接，拼凑Url
+2. 该链接获取后 自动转向至回调域名
+3. userId拥有可以使用
+4.  自己A-> Tencent -> 自己B
