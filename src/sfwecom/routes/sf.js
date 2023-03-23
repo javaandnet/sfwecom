@@ -19,32 +19,66 @@ router.get('/worker', function (req, res, next) {
   });
 });
 /* GET users listing. */
+router.post('/worker', function (req, res, next) {
+  var jsh = new JSH();
+  var sql = "SELECT Id , Name ,SalesStatus__c  FROM worker__C ";
+  jsh.query(sql).then(data => {
+    var rtn = "";
+    if (data.totalSize > 0) {
+      //data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
+      data.data = data.records.map(function (elm) { return { id: elm.Id, name: elm.Name, salesStatus: elm.SalesStatus__c }; });
+      res.send(data);
+    } else {
+      res.send("false");
+    }
+  });
+});
+/* GET users listing. */
 router.get('/worker/:user', function (req, res, next) {
   var user = req.params.user;
   var jsh = new JSH();
-  jsh.retrieve("worker__c",user).then(data => {
+  jsh.retrieve("worker__c", user).then(data => {
     var rtn = "";
     // console.log(data);
- 
-      //data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
-      res.send({id:data.Id,name:data.Name,status:data.Status__c,salesStatus:data.SalesStatus__c});
-    
+
+    //data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
+    res.send({ id: data.Id, name: data.Name, status: data.Status__c, salesStatus: data.SalesStatus__c });
+
+  });
+});
+
+/* GET users listing. */
+router.post('/worker/:user', function (req, res, next) {
+  var user = req.params.user;
+  var jsh = new JSH();
+  jsh.retrieve("worker__c", user).then(data => {
+    var rtn = "";
+    // console.log(data);
+
+    //data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
+    res.send({ data: { id: data.Id, name: data.Name, status: data.Status__c, salesStatus: data.SalesStatus__c } });
+
   });
 });
 router.post('/worker/:user/update', function (req, res, next) {
   var user = req.params.user;
   console.log(req.body);
   var jsh = new JSH();
-  jsh.update("worker__c",{Id:user,SalesStatus__c:req.body.salesStatus,ChangeReason__c:req.body.reason,StatusLastUpdater__c:req.body.userId}).then(data => {
-      res.send(data);
+  var updateDateData = { Id: user, SalesStatus__c: req.body.salesStatus, ChangeReason__c: req.body.reason, StatusLastUpdater__c: req.body.updateuser };
+  if (req.body.status && req.body.status != "") {
+    updateDateData.status = req.body.status;
+  }
+
+  jsh.update("worker__c", updateDateData).then(data => {
+    res.send(data);
   });
   // jsh.retrieve("worker__c",user).then(data => {
   //   var rtn = "";
   //   // console.log(data);
- 
+
   //     //data.records.forEach(elm => { rtn = rtn + elm.Name + "<br>" });
   //     res.send({id:data.Id,name:data.Name,status:data.Status__c});
-    
+
   // });
 });
 
