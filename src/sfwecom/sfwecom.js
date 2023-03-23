@@ -58,7 +58,7 @@ app.get('/',function(req, res){//get,put,post,delete
 });
 
 // app.use('/', indexRouter);
-// app.use('/users', usersRouter);
+app.use('/users', usersRouter);
 app.use('/msg', msgRouter);
 app.use('/sf', sfRouter);
 app.use('/wc', wcRouter);

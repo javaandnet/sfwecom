@@ -21,7 +21,7 @@ router.get('/worker', function (req, res, next) {
 /* GET users listing. */
 router.post('/worker', function (req, res, next) {
   var jsh = new JSH();
-  var sql = "SELECT Id , Name ,SalesStatus__c  FROM worker__C ";
+  var sql = "SELECT Id , Name ,SalesStatus__c,Status__c  FROM worker__C order by SalesStatus__c";
   jsh.query(sql).then(data => {
     var rtn = "";
     if (data.totalSize > 0) {
