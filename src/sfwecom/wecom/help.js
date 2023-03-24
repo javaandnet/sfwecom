@@ -101,8 +101,15 @@ class WCH {
     });
     var aa = await user.simpleList(1, 0);
     console.log(aa.data.userlist.length);
-    for (var obj in aa.data.userlist) {
-      console.log(aa.data.userlist[obj]);
+    for (var k in aa.data.userlist) {
+      //
+      var obj = aa.data.userlist[k];
+      var email = obj.userid;
+      if(email.indexOf("@")<0){
+        email = email + "@fsr.co.jp";
+      }
+      
+      console.log(k+","+obj.name+","+obj.userid+","+email);
     }
   }
 

@@ -8,7 +8,7 @@ var router = express.Router();
 /* GET users listing. */
 router.get('/userid', function (req, res, next) {
   var STATE = "aaa";
-  console.log(wcconfig);
+  //console.log(wcconfig);
   var wch = new WCH();
   var REDIRECT_URI = "http://wc.fsr.co.jp:11117/wecom/";
   var url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wcconfig.corpId+"&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_base&state="+STATE+"&agentid="+wcconfig.agentid+"#wechat_redirect  ";

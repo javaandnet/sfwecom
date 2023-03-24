@@ -62,7 +62,7 @@ router.post('/worker/:user', function (req, res, next) {
 });
 router.post('/worker/:user/update', function (req, res, next) {
   var user = req.params.user;
-  console.log(req.body);
+  //console.log(req.body);
   var jsh = new JSH();
   var updateDateData = { Id: user, SalesStatus__c: req.body.salesStatus, ChangeReason__c: req.body.reason, StatusLastUpdater__c: req.body.updateuser };
   if (req.body.status && req.body.status != "") {

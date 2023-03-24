@@ -76,7 +76,7 @@ class JSH {
             // Single record retrieval
             me.conn.sobject(objectName).retrieve(id, function (err, res) {
                 if (err) {
-                    console.log(err);
+                    //console.log(err);
                     resolve({ errorCode: err.errorCode });
                 } else {
                     console.log("Name : " + res.Name);

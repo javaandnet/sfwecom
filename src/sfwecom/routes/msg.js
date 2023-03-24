@@ -35,8 +35,8 @@ router.get('/', function (req, res, next) {
 
 
 
-//http://localhost:3000/msg?type=0&to=nin&msg=testInfo
-//http://localhost:3000/msg?type=1&to=SALESFORCE&msg=SALESFORCETEST
+//http://localhost:11117/msg?type=0&to=nin&msg=testInfo
+//http://localhost:11117/msg?type=1&to=SALESFORCE&msg=SALESFORCETEST
 //http://localhost:3000/msg?type=1&to=SALESFORCE&msg=SALESFORCETEST
 // http://160.16.216.251:11117/msg?type=1&to=SALESFORCE&msg=SALESFORCETEST
 export default router;
