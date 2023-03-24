@@ -67,6 +67,39 @@ class JSH {
     delete() {
 
     }
+
+    async upsert(objectName, obj) {
+        var me = this;
+        if (me.conn == null) {
+            await me.login();
+        }
+        return new Promise(function (resolve, reject) {
+            // Single record upsert
+            console.log(obj);
+
+            if (typeof (obj.Id) == "undefined" || obj.Id == "" || obj.Id == "-1") {
+                delete obj["Id"];
+                me.conn.sobject(objectName).insert(obj, function (err, res) {
+                    if (err) {
+                        console.error(err);
+                        resolve(err);
+                    } else {
+                        resolve(res);
+                    }
+                });
+            } else {
+                me.conn.sobject(objectName).update(obj,  function (err, res) {
+                    if (err) {
+                        console.error(err);
+                        resolve(err);
+                    } else {
+                        resolve(res);
+                    }
+                });
+            }
+        });
+    }
+
     async retrieve(objectName, id) {
         var me = this;
         if (me.conn == null) {
