@@ -45,6 +45,28 @@ class JSH {
             });
         });
     }
+
+    async upload(file,fileName) {
+        var me = this;
+        if (me.conn == null) {
+            await me.login();
+        }
+
+        return new Promise(function (resolve, reject) {
+            me.conn.sobject('ContentVersion').create({
+                PathOnClient : fileName,
+                VersionData : file.toString('base64')
+              }).then(function(e){
+                resolve("ok");
+                console.log(e);
+              }).catch(function(e){
+                resolve("ng");
+                console.log(e);
+              });;
+        });
+    }
+
+
     async update(objectName, rec) {
         var me = this;
         if (me.conn == null) {

@@ -10,10 +10,12 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import logger from 'morgan';
 import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
+
 import msgRouter from './routes/msg.js';
+import uploadRouter from './routes/upload.js';
 import sfRouter from './routes/sf.js';
 import wcRouter from './routes/wc.js';
+import userRouter from './routes/user.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,7 +43,7 @@ app.use(cors());
 app.set('view engine', 'ejs');
 
 //  拡張子 htm,htmlのテンプレートエンジンを指定
-app.engine('htm', ejs.renderFile);  　//  <--追加
+app.engine('htm', ejs.renderFile);  //  <--追加
 app.engine('html', ejs.renderFile);   //　<--追加
 
 app.use(logger('dev'));
@@ -58,10 +60,12 @@ app.get('/',function(req, res){//get,put,post,delete
 });
 
 // app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', userRouter);
 app.use('/msg', msgRouter);
 app.use('/sf', sfRouter);
 app.use('/wc', wcRouter);
+// app.use('/auth', authRouter);
+app.use('/upload', uploadRouter);
 
 /**
  * Listen on provided port, on all network interfaces.
