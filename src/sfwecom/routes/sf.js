@@ -13,15 +13,13 @@ router.post('/folder/add', function (req, res, next) {
     res.send(ret);
   }).catch(function (e) {
     res.send(e);
-
   });
-
 });
 
-　
 
+router.get('/file/:id', function (req, res, next) {
+    var jsh = new JSH();
+    var file =  jsh.file(req, res,req.params.id);
+});
 
-// router.get('/worker/:user/update', function (req, res, next) {
-
-// });
 export default router;

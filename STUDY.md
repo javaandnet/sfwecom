@@ -27,4 +27,14 @@ http://kayakuguri.github.io/blog/2014/02/26/submit-callout-with-multipart/
 2. @绑定方法
 3. :data-id="user.Id" var id = e.currentTarget.dataset.id;
 4. 数据迁移 this.$router.push({ name: 'userInfo', query: { user: id } })
-      
+
+## Salesforce文件体系
+1. 以contentXX开头的 几个Object
+2. ContentDocument 是核心
+3. ContentVersion 存放文件实体 VersionData 注意是以Base64存放的      
+## Base64 
+以64个字符(其实是65 有=号)
+## 网络获取数据
+1. 首先以Base64 取得数据（fetch-base64）
+2. 转换成Binary发送，直接前面可以显示
+3. 也可以Base64 但前面需要支持
