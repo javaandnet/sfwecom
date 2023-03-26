@@ -1,5 +1,5 @@
 import express from "express";
-import { WCH } from '../wecom/help.js';
+import { WCH } from '../util/wch.js';
 import  wcconfig  from '../wecom/config.js';
 
 var router = express.Router();

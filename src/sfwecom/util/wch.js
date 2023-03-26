@@ -1,6 +1,6 @@
 import { Wecom } from "wecom";
 import { User } from 'wecom';
-import config from './config.js';
+import config from '../wecom/config.js';
 // const Wecom = require("wecom");
 // const User = require("wecom");
 

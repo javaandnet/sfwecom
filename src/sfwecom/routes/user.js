@@ -1,6 +1,6 @@
 import express from "express";
 import request from 'request';
-import { WCH } from '../wecom/help.js';
+import { WCH } from '../util/wch.js';
 import { JSH } from '../util/jsh.js';
 import { Http } from '../util/http.js';
 
