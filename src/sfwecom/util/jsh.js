@@ -1,7 +1,7 @@
 
 import jsforce from 'jsforce';
 // var conn = new jsforce.Connection();
-import config from './config.js';
+import config from '../jsforce/config.js';
 //PWD+ResetToken
 
 class JSH {
@@ -46,26 +46,73 @@ class JSH {
         });
     }
 
-    async upload(file,fileName) {
+    async upload(file, fileName, folderId, libraryId) {
         var me = this;
         if (me.conn == null) {
             await me.login();
         }
-
+        try {
+            //1. Insert ContentVersion.
+            var file = await me.conn.sobject('ContentVersion').create({
+                PathOnClient: fileName,
+                FirstPublishLocationId: libraryId,
+                VersionData: file.toString('base64')
+            });
+            //0680l000003V5qVAAS
+            //1.1 Get DocumentId
+            var document = await me.conn.sobject('ContentDocument').find({ LatestPublishedVersionId: file.id}, "Id");
+            // 2.Insert ContentDocumentlink and use required Library Id in LinkedEntityId field.
+            // await me.conn.sobject('ContentDocumentLink').create({
+            //     ContentDocumentId: document[0].Id,
+            //     LinkedEntityId: libraryId
+            // });
+            // sELECT Id, Title FROM ContentVersion
+            // 07I0l0000003CCMEA2
+            //  3.Query on ContentFolderMember Where ChildRecordId is your ContentVersion file Id and ParentContentFolderId is the RootContentFolderId of library(ContentWorkspace).
+            if(document.length == 0){
+                throw new Error('ERROR MOVE FOLDER');
+            }
+            var folder = await me.conn.sobject('ContentFolderMember').find({ ChildRecordId: document[0].Id }, "Id");
+            if(folder.length == 0){
+                throw new Error('ERROR MOVE FOLDER');
+            }
+            //4. Now update the ContentFolderMember record's ParentContentFolderId field with your required Folder Id.
+            await me.conn.sobject('ContentFolderMember').update({ Id: folder[0].Id, ParentContentFolderId: folderId });
+            //https://d5h00000523kreay--fsrdev001.sandbox.lightning.force.com/
+            //  //https://d5h00000523kreay--fsrdev001.sandbox.my.salesforce.com/sfc/servlet.shepherd/version/download/0680l000003V5r4AAC
+        } catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }
+     //SELECT Id, ParentContentFolderId, Title FROM ContentFolderItem WHERE ParentContentFolderId = '07H0l0000004SS1EAM'
+    /**
+     * 
+     * @param {*} Name 
+     * @param {*} DeveloperName 
+     * @param {*} Type 
+     * @param {*} AccessType 
+     * @param {*} ParentId
+     * @returns 
+     */
+    async createFolder(folder) {
+        var me = this;
+        if (me.conn == null) {
+            await me.login();
+        }
         return new Promise(function (resolve, reject) {
-            me.conn.sobject('ContentVersion').create({
-                PathOnClient : fileName,
-                VersionData : file.toString('base64')
-              }).then(function(e){
-                resolve("ok");
-                console.log(e);
-              }).catch(function(e){
-                resolve("ng");
-                console.log(e);
-              });;
+            me.conn.sobject('ContentFolder').create(folder).then(function (ret) {
+                if (ret || !ret.success) {
+                    console.error(ret);
+                    reject(ret);
+                } else {
+                    resolve(ret);
+                }
+            }).catch(function (err) {
+                reject(err);
+            });
         });
     }
-
 
     async update(objectName, rec) {
         var me = this;
@@ -110,7 +157,7 @@ class JSH {
                     }
                 });
             } else {
-                me.conn.sobject(objectName).update(obj,  function (err, res) {
+                me.conn.sobject(objectName).update(obj, function (err, res) {
                     if (err) {
                         console.error(err);
                         resolve(err);

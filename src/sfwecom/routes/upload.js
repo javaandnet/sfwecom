@@ -1,7 +1,7 @@
 import express from "express";
 import os from "os";
 import multer from "multer";
-import { JSH } from '../jsforce/help.js';
+import { JSH } from '../util/jsh.js';
 
 var router = express.Router();
 const storage = multer.memoryStorage()

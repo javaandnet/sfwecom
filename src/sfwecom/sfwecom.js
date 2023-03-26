@@ -16,6 +16,9 @@ import uploadRouter from './routes/upload.js';
 import sfRouter from './routes/sf.js';
 import wcRouter from './routes/wc.js';
 import userRouter from './routes/user.js';
+import worktimeRouter from './routes/worktime.js';
+import workerRouter from './routes/worker.js';
+import projectRouter from './routes/project.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -66,6 +69,9 @@ app.use('/sf', sfRouter);
 app.use('/wc', wcRouter);
 // app.use('/auth', authRouter);
 app.use('/upload', uploadRouter);
+app.use('/worktime', worktimeRouter);
+app.use('/worker', workerRouter);
+app.use('/project', projectRouter);
 
 /**
  * Listen on provided port, on all network interfaces.

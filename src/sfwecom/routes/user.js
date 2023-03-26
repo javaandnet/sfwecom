@@ -1,7 +1,7 @@
 import express from "express";
 import request from 'request';
 import { WCH } from '../wecom/help.js';
-import { JSH } from '../jsforce/help.js';
+import { JSH } from '../util/jsh.js';
 import { Http } from '../util/http.js';
 
 import crypto from 'crypto';
