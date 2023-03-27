@@ -15,6 +15,9 @@ class Util {
             return obj;
         }
     }
+    isObject(obj){
+        return typeof obj === "object";
+    }
 }
 
 export { Util };

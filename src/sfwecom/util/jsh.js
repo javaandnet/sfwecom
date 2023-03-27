@@ -3,7 +3,7 @@ import jsforce from 'jsforce';
 // var conn = new jsforce.Connection();
 import config from '../jsforce/config.js';
 import fetch64 from 'fetch-base64';
-//PWD+ResetToken
+import {Util} from './util.js';
 import mimetypes from "mime-types";
 class JSH {
     constructor(x) {
@@ -12,6 +12,7 @@ class JSH {
 
     login() {
         var me = this;
+        //PWD+ResetToken
         return new Promise(function (resolve, reject) {
             if (me.conn != null) {
                 resolve(me.conn);
@@ -58,31 +59,35 @@ class JSH {
         //     });
         //     return await Promise.resolve(fileId);
         // } else {
-            try {
-                //1. Insert ContentVersion.
-                var file = await me.conn.sobject('ContentVersion').create({
-                    PathOnClient: fileName,
-                    FirstPublishLocationId: libraryId,
-                    VersionData: file.toString('base64')
-                });
-                //0680l000003V5qVAAS
-                //2 Get DocumentId
-                var document = await me.conn.sobject('ContentDocument').find({ LatestPublishedVersionId: file.id }, "Id");
-                if (document.length == 0) {
-                    throw new Error('ERROR MOVE FOLDER');
-                }
-                //3.Get FolderMember 文件和文件夹关系
-                var folder = await me.conn.sobject('ContentFolderMember').find({ ChildRecordId: document[0].Id }, "Id");
-                if (folder.length == 0) {
-                    throw new Error('ERROR MOVE FOLDER');
-                }
-                //4. 更新关系至对应文件夹
-                await me.conn.sobject('ContentFolderMember').update({ Id: folder[0].Id, ParentContentFolderId: folderId });
-                return await Promise.resolve(file.id);
-            } catch (e) {
-                console.log(e);
-                return await Promise.reject(e);
+        try {
+            //削除する
+            if (fileId != "") {
+                await me.delete("ContentDocument", { LatestPublishedVersionId: fileId });
             }
+            //1. Insert ContentVersion.
+            var file = await me.conn.sobject('ContentVersion').create({
+                PathOnClient: fileName,
+                FirstPublishLocationId: libraryId,
+                VersionData: file.toString('base64')
+            });
+            //0680l000003V5qVAAS
+            //2 Get DocumentId
+            var document = await me.conn.sobject('ContentDocument').find({ LatestPublishedVersionId: file.id }, "Id");
+            if (document.length == 0) {
+                throw new Error('ERROR MOVE FOLDER');
+            }
+            //3.Get FolderMember 文件和文件夹关系
+            var folder = await me.conn.sobject('ContentFolderMember').find({ ChildRecordId: document[0].Id }, "Id");
+            if (folder.length == 0) {
+                throw new Error('ERROR MOVE FOLDER');
+            }
+            //4. 更新关系至对应文件夹
+            await me.conn.sobject('ContentFolderMember').update({ Id: folder[0].Id, ParentContentFolderId: folderId });
+            return await Promise.resolve(file.id);
+        } catch (e) {
+            console.log(e);
+            return await Promise.reject(e);
+        }
         // }
     }
     //SELECT Id, ParentContentFolderId, Title FROM ContentFolderItem WHERE ParentContentFolderId = '07H0l0000004SS1EAM'
@@ -131,15 +136,38 @@ class JSH {
     insert() {
 
     }
-    delete() {
-
+    async delete(objectName, where) {
+        var me = this;
+        var util = new Util();
+        await me.login();
+        return new Promise(function (resolve, reject) {
+            // DELETE FROM Account WHERE CreatedDate = TODAY
+            if (util.isObject(where)) {
+                me.conn.sobject(objectName)
+                    .find(where)
+                    .destroy(function (err, rets) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(rets);
+                        }
+                    });
+            } else {
+                me.conn.sobject(objectName)
+                    .del(function (err, rets) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(rets);
+                        }
+                    });
+            }
+        });
     }
 
     async upsert(objectName, obj) {
         var me = this;
-        if (me.conn == null) {
-            await me.login();
-        }
+        await me.login();
         return new Promise(function (resolve, reject) {
             // Single record upsert
             console.log(obj);
