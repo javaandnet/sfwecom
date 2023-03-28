@@ -92,7 +92,8 @@ async function regUser(openid) {
         var rtn = { errno: 0, data: { userInfo: rtnData, token: "" } };
         resolve(rtn);
       } else {//Insert
-        var dataQ = { Id: "", OpenId__c: openid, Status__c: 0, Name: "変更してください" };
+        //PlaceHolder修改
+        var dataQ = { Id: "", OpenId__c: openid, Status__c: 0, Name: "" };
         jsh.upsert("WeChat__c", dataQ).then(function (req) {
           dataQ.role = 0;
           rtnData = { id: req.id, name: dataQ.Name, openId: dataQ.OpenId__c, role: 0, status: 0 };

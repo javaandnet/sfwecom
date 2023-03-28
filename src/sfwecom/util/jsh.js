@@ -52,13 +52,6 @@ class JSH {
         var me = this;
 
         await me.login();
-        // if (fileId != "") {
-        //     me.conn.sobject('ContentVersion').update({
-        //         Id: fileId,
-        //         VersionData: file.toString('base64')
-        //     });
-        //     return await Promise.resolve(fileId);
-        // } else {
         try {
             //削除する
             if (fileId != "") {

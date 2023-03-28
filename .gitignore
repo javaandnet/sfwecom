@@ -104,3 +104,4 @@ dist
 .tern-port
 .sfdx/tools/apex.db
 a.csv
+src/sfwecom/jsforce/<view>.md

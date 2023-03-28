@@ -37,6 +37,7 @@ router.post('/upload', upload.single('file'), function (req, res) {
     const user = req.body.user;
     const userName = req.body.userName;
     const folder = req.body.folder;
+    const timeId = req.body.timeId;
     const worktime = req.body.worktime;
     const fileId = req.body.fileId;
     const file = req.file;
@@ -44,14 +45,14 @@ router.post('/upload', upload.single('file'), function (req, res) {
     var lastIndex = file.originalname.lastIndexOf(".");
     var fileName = file.originalname;
     fileName = month + "_" + userName + fileName.substring(lastIndex, fileName.length);
-    var sql = "SELECT Id, Name, ParentContentFolderId FROM ContentFolder where ParentContentFolderId= '"+ JSHConfig.rootFolder+"' and Name='" + month + "'";
+    var sql = "SELECT Id, Name, ParentContentFolderId FROM ContentFolder where ParentContentFolderId= '" + JSHConfig.rootFolder + "' and Name='" + month + "'";
     jsh.query(sql).then(function (rtn) {
         if (rtn.totalSize > 0) {
             var folderId = rtn.records[0].Id;
             var libraryId = JSHConfig.libraryId;
-            jsh.upload(file.buffer, fileName, fileId,folderId, libraryId).then(function (rut) {
-                jsh.upsert("WorkTime__c", { Id: worktime,File__c: rut, Url__c: JSHConfig.serverUrl+"sf/file/"+ rut }).then(function (worktime) {
-                    res.send(rut);
+            jsh.upload(file.buffer, fileName, fileId, folderId, libraryId).then(function (rut) {
+                jsh.upsert("WorkTime__c", { Id: timeId, File__c: rut, Month__c: month, Employee__c: user, Time__c: worktime, Url__c: JSHConfig.serverUrl + "sf/file/" + rut, File__c: rut }).then(function (rtn) {
+                    res.send(JSON.stringify({fileId:rut,timeId:rtn.id}));
                 }).catch(function (e) {
                     res.send(e);
                 });
